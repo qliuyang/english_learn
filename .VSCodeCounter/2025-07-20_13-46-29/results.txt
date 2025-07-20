@@ -1,0 +1,46 @@
+Date : 2025-07-20 13:46:29
+Directory : c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib
+Total : 16 files,  1777 codes, 28 comments, 215 blanks, all 2020 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         16 |      1,777 |         28 |        215 |      2,020 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                 | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                    |         16 |      1,777 |         28 |        215 |      2,020 |
+| . (Files)                                                                            |          1 |        236 |          0 |         23 |        259 |
+| apis                                                                                 |          1 |         49 |          1 |          9 |         59 |
+| components                                                                           |          1 |        202 |          1 |         19 |        222 |
+| models                                                                               |          4 |        365 |          8 |         68 |        441 |
+| pages                                                                                |          8 |        875 |         18 |         87 |        980 |
+| services                                                                             |          1 |         50 |          0 |          9 |         59 |
++--------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                             | language | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\apis\api.dart                | Dart     |         49 |          1 |          9 |         59 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\components\word_display.dart | Dart     |        202 |          1 |         19 |        222 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\main.dart                    | Dart     |        236 |          0 |         23 |        259 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\models\music.dart            | Dart     |         85 |          0 |         10 |         95 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\models\music.g.dart          | Dart     |         80 |          4 |          9 |         93 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\models\word.dart             | Dart     |        100 |          0 |         28 |        128 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\models\word.g.dart           | Dart     |        100 |          4 |         21 |        125 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\pages\AboutPage.dart         | Dart     |         43 |          1 |          3 |         47 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\pages\CollectionPage.dart    | Dart     |         12 |          0 |          3 |         15 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\pages\HomePage.dart          | Dart     |        112 |         10 |         15 |        137 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\pages\LearnHistoryPage.dart  | Dart     |         81 |          0 |          7 |         88 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\pages\MusicPage.dart         | Dart     |        184 |          0 |         20 |        204 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\pages\MusicPlayerPage.dart   | Dart     |        138 |          6 |          7 |        151 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\pages\SearchPage.dart        | Dart     |        159 |          1 |         17 |        177 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\pages\UserPage.dart          | Dart     |        146 |          0 |         15 |        161 |
+| c:\Users\LiuYang\Desktop\Java\english_learn_flutter\lib\services\MusicService.dart   | Dart     |         50 |          0 |          9 |         59 |
+| Total                                                                                |          |      1,777 |         28 |        215 |      2,020 |
++--------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

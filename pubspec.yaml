@@ -1,0 +1,40 @@
+name: english_learn
+description: "英语词典"
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  url_launcher: any
+  image_picker: any
+  json_annotation: ^4.9.0
+  http: any
+  just_audio: any
+  shared_preferences: any
+  provider: any
+  cupertino_icons: ^1.0.8
+  flutter_launcher_icons: ^0.14.4
+  mockito: ^5.4.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.5.4
+  json_serializable: ^6.9.5
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/icon/main.png
+flutter_icons:
+  android: true
+  image_path: "assets/icon/main.png"  
+  adaptive_icon_background: "#FFFFFF" 
+  adaptive_icon_foreground: "assets/icon/main.png" 
