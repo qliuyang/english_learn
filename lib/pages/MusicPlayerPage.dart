@@ -4,29 +4,61 @@ import '../models/music.dart';
 import 'package:provider/provider.dart';
 import '../services/MusicService.dart';
 
-class MusicPlayerPage extends StatelessWidget {
+class MusicPlayerPage extends StatefulWidget {
   final MusicData musicData;
 
   const MusicPlayerPage({super.key, required this.musicData});
+  @override
+  State<MusicPlayerPage> createState() => _MusicPlayerPageState();
+}
+
+class _MusicPlayerPageState extends State<MusicPlayerPage> {
+  late final MusicPlayerService playerService;
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  void _init() async {
+    playerService = Provider.of<MusicPlayerService>(context, listen: false);
+    if (playerService.currentMusic != widget.musicData) {
+      await playerService.reset();
+    }
+  }
+
+  void _play(bool isPlaying) async {
+    if (playerService.currentAudioUrl == null ||
+        playerService.currentMusic != widget.musicData) {
+      final url = await ApiService.fetchMediaSource(widget.musicData.mid, '8');
+      await playerService.play(url, musicData: widget.musicData);
+    } else {
+      if (isPlaying == true) {
+        await playerService.pause();
+      } else {
+        await playerService.resume();
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    final playerService = Provider.of<MusicPlayerService>(context);
-
     return Scaffold(
-      appBar: AppBar(title: Text(musicData.song)),
+      appBar: AppBar(title: Text(widget.musicData.song)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Image.network(musicData.cover, width: 300, height: 300),
+            Image.network(widget.musicData.cover, width: 300, height: 300),
             const SizedBox(height: 20),
             Text(
-              musicData.song,
+              widget.musicData.song,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text(
-              musicData.singer,
+              widget.musicData.singer,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const Spacer(),
@@ -55,7 +87,10 @@ class MusicPlayerPage extends StatelessWidget {
               builder: (context, snapshot) {
                 final totalDuration = snapshot.data ?? Duration.zero;
                 return Slider(
-                  value: currentPosition.inMilliseconds.toDouble().clamp(0, totalDuration.inMilliseconds.toDouble()),
+                  value: currentPosition.inMilliseconds.toDouble().clamp(
+                    0,
+                    totalDuration.inMilliseconds.toDouble(),
+                  ),
                   max: totalDuration.inMilliseconds.toDouble(),
                   min: 0,
                   onChanged: (value) {
@@ -63,8 +98,13 @@ class MusicPlayerPage extends StatelessWidget {
                   },
                   onChangeEnd: (value) {
                     // 确保最终值不超过最大时长
-                    final clampedValue = value.clamp(0, totalDuration.inMilliseconds.toDouble());
-                    playerService.seek(Duration(milliseconds: clampedValue.toInt()));
+                    final clampedValue = value.clamp(
+                      0,
+                      totalDuration.inMilliseconds.toDouble(),
+                    );
+                    playerService.seek(
+                      Duration(milliseconds: clampedValue.toInt()),
+                    );
                   },
                 );
               },
@@ -110,21 +150,13 @@ class MusicPlayerPage extends StatelessWidget {
                   },
                 ),
                 IconButton(
-                  icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                  icon: Icon(
+                    isPlaying
+                        ? Icons.pause
+                        : Icons.play_arrow,
+                  ),
                   onPressed: () async {
-                    if (playerService.currentAudioUrl == null) {
-                      final url = await ApiService.fetchMediaSource(
-                        musicData.mid,
-                        '8',
-                      );
-                      await playerService.play(url,musicData: musicData);
-                    } else {
-                      if (isPlaying) {
-                        await playerService.pause();
-                      } else {
-                        await playerService.resume();
-                      }
-                    }
+                    _play(isPlaying);
                   },
                 ),
                 IconButton(

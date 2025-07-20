@@ -235,11 +235,7 @@ class MiniPlayer extends StatelessWidget {
                   isPlaying ? playerService.pause() : playerService.resume(),
             );
           },
-        ),
-        IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: playerService.stop,
-        ),
+        )
       ],
     );
   }

@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
   static const String routeName = '/about';
-  final String githubUrl = 'https://github.com/your-repo/english_learn_flutter';
+  final String githubUrl = 'https://github.com/qliuyang/english_learn';
 
   const AboutPage({super.key});
 
@@ -40,7 +40,7 @@ class AboutPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               const Text(
-                '作者: LiuYang',
+                '作者: Jerry',
                 style: TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 16),
