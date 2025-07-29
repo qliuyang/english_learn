@@ -49,7 +49,6 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-      print(jsonData);
       return jsonData['data']['url'];
     } else {
       throw Exception('Failed to load music source');

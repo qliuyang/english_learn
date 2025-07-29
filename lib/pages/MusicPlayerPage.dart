@@ -1,4 +1,3 @@
-import 'package:english_learn/apis/api.dart';
 import 'package:flutter/material.dart';
 import '../models/music.dart';
 import 'package:provider/provider.dart';
@@ -6,14 +5,16 @@ import '../services/MusicService.dart';
 
 class MusicPlayerPage extends StatefulWidget {
   final MusicData musicData;
+  final List<MusicData>? musicList;
 
-  const MusicPlayerPage({super.key, required this.musicData});
+  const MusicPlayerPage({super.key, required this.musicData, this.musicList});
   @override
   State<MusicPlayerPage> createState() => _MusicPlayerPageState();
 }
 
 class _MusicPlayerPageState extends State<MusicPlayerPage> {
   late final MusicPlayerService playerService;
+  late MusicData musicData_;
 
   @override
   void initState() {
@@ -22,43 +23,62 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
   }
 
   void _init() async {
+    musicData_ = widget.musicData;
     playerService = Provider.of<MusicPlayerService>(context, listen: false);
-    if (playerService.currentMusic != widget.musicData) {
+    if (playerService.currentMusicData != musicData_) {
       await playerService.reset();
     }
+    playerService.initData(musicData_);
   }
-
-  void _play(bool isPlaying) async {
-    if (playerService.currentAudioUrl == null ||
-        playerService.currentMusic != widget.musicData) {
-      final url = await ApiService.fetchMediaSource(widget.musicData.mid, '8');
-      await playerService.play(url, musicData: widget.musicData);
-    } else {
-      if (isPlaying == true) {
-        await playerService.pause();
-      } else {
-        await playerService.resume();
+    Future<void> _playPrevious() async {
+    if (widget.musicList != null && widget.musicList!.isNotEmpty) {
+      final currentIndex = widget.musicList!.indexOf(
+        playerService.currentMusicData!,
+      );
+      if (currentIndex > 0) {
+        final previousMusic = widget.musicList![currentIndex - 1];
+        await playerService.initData(previousMusic);
+        await playerService.play();
+        setState(() {
+          musicData_ = previousMusic;
+        });
       }
     }
   }
 
+  Future<void> _playNext() async {
+    if (widget.musicList != null && widget.musicList!.isNotEmpty) {
+      final currentIndex = widget.musicList!.indexOf(
+        playerService.currentMusicData!,
+      );
+      if (currentIndex < widget.musicList!.length - 1) {
+        final nextMusic = widget.musicList![currentIndex + 1];
+        await playerService.initData(nextMusic);
+        await playerService.play();
+        setState(() {
+          musicData_ = nextMusic;
+        });
+      }
+    }
+  }
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.musicData.song)),
+      appBar: AppBar(title: Text(musicData_.song)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Image.network(widget.musicData.cover, width: 300, height: 300),
+            Image.network(musicData_.cover, width: 300, height: 300),
             const SizedBox(height: 20),
             Text(
-              widget.musicData.song,
+              musicData_.song,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text(
-              widget.musicData.singer,
+              musicData_.singer,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const Spacer(),
@@ -143,27 +163,19 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                // ... existing code ...
                 IconButton(
                   icon: const Icon(Icons.skip_previous),
-                  onPressed: () {
-                    // 上一首
-                  },
+                  onPressed: _playPrevious,
                 ),
+                // ... existing code ...
                 IconButton(
-                  icon: Icon(
-                    isPlaying
-                        ? Icons.pause
-                        : Icons.play_arrow,
-                  ),
-                  onPressed: () async {
-                    _play(isPlaying);
-                  },
+                  icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                  onPressed: playerService.togglePlay,
                 ),
                 IconButton(
                   icon: const Icon(Icons.skip_next),
-                  onPressed: () {
-                    // 下一首
-                  },
+                  onPressed: _playNext,
                 ),
               ],
             );

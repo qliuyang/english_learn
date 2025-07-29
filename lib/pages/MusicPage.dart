@@ -172,7 +172,9 @@ class _MusicPageState extends State<MusicPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => MusicPlayerPage(musicData: music),
+                builder: (context) => MusicPlayerPage(musicData: music,
+                  musicList: _musicList,
+                ),
               ),
             );
           },

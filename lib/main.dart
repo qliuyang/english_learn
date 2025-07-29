@@ -10,7 +10,9 @@ import 'pages/LearnHistoryPage.dart';
 import 'pages/CollectionPage.dart';
 import 'pages/AboutPage.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
   runApp(
     ChangeNotifierProvider(
       create: (context) => MusicPlayerService(),
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '英语词典',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
         useMaterial3: true,
       ),
       home: const MainNavigation(),
@@ -131,7 +133,7 @@ class _MainNavigationState extends State<MainNavigation>
         BottomNavigationBarItem(icon: Icon(Icons.person), label: '用户'),
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: Colors.deepPurple,
+      selectedItemColor: Colors.lightBlue,
       unselectedItemColor: Colors.black,
       onTap: _onItemTapped,
     );
@@ -190,7 +192,9 @@ class MiniPlayer extends StatelessWidget {
               shape: BoxShape.circle,
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(playerService.currentMusic?.cover ?? '无封面'),
+                image: NetworkImage(
+                  playerService.currentMusicData?.cover ?? '无封面',
+                ),
               ),
             ),
           ),
@@ -205,13 +209,13 @@ class MiniPlayer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            playerService.currentMusic?.song ?? '未知歌曲',
+            playerService.currentMusicData?.song ?? '未知歌曲',
             style: const TextStyle(fontWeight: FontWeight.bold),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            playerService.currentMusic?.singer ?? '未知歌手',
+            playerService.currentMusicData?.singer ?? '未知歌手',
             style: const TextStyle(fontSize: 12),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -232,21 +236,21 @@ class MiniPlayer extends StatelessWidget {
             return IconButton(
               icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
               onPressed: () =>
-                  isPlaying ? playerService.pause() : playerService.resume(),
+                  playerService.togglePlay(),
             );
           },
-        )
+        ),
       ],
     );
   }
 
   void _navigateToPlayer(BuildContext context) {
-    if (playerService.currentMusic != null) {
+    if (playerService.currentMusicData != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              MusicPlayerPage(musicData: playerService.currentMusic!),
+              MusicPlayerPage(musicData: playerService.currentMusicData!),
         ),
       );
     }

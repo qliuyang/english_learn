@@ -39,6 +39,7 @@ class _UserPageState extends State<UserPage> {
     }
   }
 
+
   Future<void> _saveUserData() async {
     final prefs = await SharedPreferences.getInstance();
     final data = {'nickname': _nickname, 'avatarPath': _avatarFile?.path};
@@ -101,7 +102,7 @@ class _UserPageState extends State<UserPage> {
             Navigator.pushNamed(context, '/collection');
           }),
           _buildDivider(),
-          _buildMenuItem(Icons.settings, '应用设置', () {}),
+
           _buildMenuItem(Icons.help, '关于软件', () {
             Navigator.pushNamed(context, '/about');
           }),
@@ -134,6 +135,7 @@ class _UserPageState extends State<UserPage> {
             ),
           ),
           const SizedBox(height: 8),
+      
         ],
       ),
     );
@@ -151,6 +153,7 @@ class _UserPageState extends State<UserPage> {
   Widget _buildDivider() {
     return const Divider(height: 1, thickness: 1);
   }
+
 
   @override
   void dispose() {

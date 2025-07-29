@@ -11,15 +11,15 @@ dependencies:
   flutter:
     sdk: flutter
   url_launcher: any
+  provider: any
   image_picker: any
-  json_annotation: ^4.9.0
+  json_annotation: any
   http: any
   just_audio: any
   shared_preferences: any
-  provider: any
-  cupertino_icons: ^1.0.8
-  flutter_launcher_icons: ^0.14.4
-  mockito: ^5.4.6
+  cupertino_icons: any
+  flutter_launcher_icons: any
+  mockito: any
 
 dev_dependencies:
   flutter_test:

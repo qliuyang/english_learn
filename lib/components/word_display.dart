@@ -5,10 +5,7 @@ import 'package:just_audio/just_audio.dart';
 class WordDisplay extends StatefulWidget {
   final WordData word;
 
-  const WordDisplay({
-    super.key,
-    required this.word,
-  });
+  const WordDisplay({super.key, required this.word});
 
   @override
   State<WordDisplay> createState() => _WordDisplayState();
@@ -34,7 +31,7 @@ class _WordDisplayState extends State<WordDisplay> {
 
       await _audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(audioUrl)));
       await _audioPlayer.play();
-      
+
       setState(() {
         _isPlaying = true;
       });
@@ -49,9 +46,9 @@ class _WordDisplayState extends State<WordDisplay> {
       });
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('播放失败: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('播放失败: $e')));
       }
     }
   }
@@ -70,12 +67,18 @@ class _WordDisplayState extends State<WordDisplay> {
           if (widget.word.phrases.isNotEmpty)
             _buildSection(
               '短语',
-              _buildListContent(widget.word.phrases, (p) => [p.p_content, p.p_cn]),
+              _buildListContent(
+                widget.word.phrases,
+                (p) => [p.p_content, p.p_cn],
+              ),
             ),
           if (widget.word.sentences.isNotEmpty)
             _buildSection(
               '例句',
-              _buildListContent(widget.word.sentences, (s) => [s.s_content, s.s_cn]),
+              _buildListContent(
+                widget.word.sentences,
+                (s) => [s.s_content, s.s_cn],
+              ),
             ),
           if (widget.word.relWords.isNotEmpty)
             _buildSection('相关词', _buildRelatedWords(widget.word)),
