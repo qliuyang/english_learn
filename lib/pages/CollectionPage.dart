@@ -139,7 +139,7 @@ class _CollectionPageState extends State<CollectionPage> {
               children: [
                 if (_isSelectionMode)
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -157,48 +157,66 @@ class _CollectionPageState extends State<CollectionPage> {
                   ),
                 Expanded(
                   child: ListView.builder(
+                    padding: const EdgeInsets.all(16.0),
                     itemCount: favoriteWords.length,
                     itemBuilder: (context, index) {
                       final word = favoriteWords[index];
                       if (_isSelectionMode) {
-                        return ListTile(
-                          title: Text(word, style: const TextStyle(fontSize: 18)),
-                          leading: Checkbox(
-                            value: _selectedWords.contains(word),
-                            onChanged: (_) => _toggleWordSelection(word),
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          onTap: () => _toggleWordSelection(word),
-                        );
-                      } else {
-                        return Dismissible(
-                          key: Key(word),
-                          direction: DismissDirection.endToStart,
-                          onDismissed: (direction) {
-                            _removeFavoriteWord(word);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('已取消收藏 "$word"'),
-                                duration: const Duration(seconds: 1),
-                              ),
-                            );
-                          },
-                          background: Container(
-                            color: Colors.red,
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.only(right: 20),
-                            child: const Icon(Icons.delete, color: Colors.white),
-                          ),
+                          elevation: 2,
+                          margin: const EdgeInsets.only(bottom: 12),
                           child: ListTile(
                             title: Text(word, style: const TextStyle(fontSize: 18)),
-                            trailing: const Icon(Icons.arrow_forward_ios),
-                            onTap: () {
-                              // 跳转到主页并传递单词信息
-                              Navigator.pushNamed(
-                                context,
-                                SearchPage.routeName,
-                                arguments: word,
+                            leading: Checkbox(
+                              value: _selectedWords.contains(word),
+                              onChanged: (_) => _toggleWordSelection(word),
+                            ),
+                            onTap: () => _toggleWordSelection(word),
+                          ),
+                        );
+                      } else {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 2,
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: Dismissible(
+                            key: Key(word),
+                            direction: DismissDirection.endToStart,
+                            onDismissed: (direction) {
+                              _removeFavoriteWord(word);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('已取消收藏 "$word"'),
+                                  duration: const Duration(seconds: 1),
+                                ),
                               );
                             },
+                            background: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 20),
+                              child: const Icon(Icons.delete, color: Colors.white),
+                            ),
+                            child: ListTile(
+                              title: Text(word, style: const TextStyle(fontSize: 18)),
+                              trailing: const Icon(Icons.arrow_forward_ios),
+                              onTap: () {
+                                // 跳转到主页并传递单词信息
+                                Navigator.pushNamed(
+                                  context,
+                                  SearchPage.routeName,
+                                  arguments: word,
+                                );
+                              },
+                            ),
                           ),
                         );
                       }

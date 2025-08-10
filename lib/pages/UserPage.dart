@@ -102,7 +102,9 @@ class _UserPageState extends State<UserPage> {
             Navigator.pushNamed(context, '/collection');
           }),
           _buildDivider(),
-
+          _buildMenuItem(Icons.settings, '设置', () {
+            Navigator.pushNamed(context, '/setting');
+          }),
           _buildMenuItem(Icons.help, '关于软件', () {
             Navigator.pushNamed(context, '/about');
           }),
@@ -120,10 +122,10 @@ class _UserPageState extends State<UserPage> {
             onTap: _pickImage,
             child: CircleAvatar(
               radius: 50,
+              backgroundColor: Colors.blue, 
               backgroundImage: _avatarFile != null
                   ? FileImage(_avatarFile!)
-                  : const AssetImage('assets/default_avatar.png')
-                        as ImageProvider,
+                  : null, 
             ),
           ),
           const SizedBox(height: 16),

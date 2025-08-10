@@ -84,6 +84,7 @@ class _WordDisplayState extends State<WordDisplay> {
             _buildSection('相关词', _buildRelatedWords(widget.word)),
           if (widget.word.synonyms.isNotEmpty)
             _buildSection('同义词', _buildSynonyms(widget.word)),
+          const SizedBox(height: 20),
         ],
       ),
     );

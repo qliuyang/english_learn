@@ -9,9 +9,11 @@ import "pages/MusicPlayerPage.dart";
 import 'pages/LearnHistoryPage.dart';
 import 'pages/CollectionPage.dart';
 import 'pages/AboutPage.dart';
+import 'pages/SettingPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   
   runApp(
     ChangeNotifierProvider(
@@ -20,6 +22,7 @@ void main() async {
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,6 +51,7 @@ class MyApp extends StatelessWidget {
         Learnhistorypage.routeName: (context) => const Learnhistorypage(),
         CollectionPage.routeName: (context) => const CollectionPage(),
         AboutPage.routeName: (context) => const AboutPage(),
+        SettingPage.routeName: (context) => const SettingPage(),
       },
     );
   }

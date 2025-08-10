@@ -11,9 +11,9 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '关于',
-          style: TextStyle(fontSize: 22), // 缩小标题
+          style: const TextStyle(fontSize: 22), // 缩小标题
         ),
       ),
       body: Center(
@@ -29,27 +29,27 @@ class AboutPage extends StatelessWidget {
                 height: 150,
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 '英语词典',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold), // 缩小标题
+                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold), // 缩小标题
               ),
               const SizedBox(height: 16),
-              const Text(
-                '版本: 1.0.0',
-                style: TextStyle(fontSize: 18),
+              Text(
+                '版本: 2.0.0',
+                style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 '作者: Jerry',
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 16),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
+                  Text(
                     '使用框架:',
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 4),
                   InkWell(
@@ -70,9 +70,9 @@ class AboutPage extends StatelessWidget {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
+                  Text(
                     '项目地址:',
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 4),
                   InkWell(

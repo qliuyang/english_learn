@@ -158,11 +158,13 @@ class _LearnhistorypageState extends State<Learnhistorypage> {
         ],
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (_isSelectionMode)
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -178,39 +180,55 @@ class _LearnhistorypageState extends State<Learnhistorypage> {
                   ],
                 ),
               ),
-            const Text(
-              "单词",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "单词",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: wordHistory.length,
+                      itemBuilder: (context, index) {
+                        final word = wordHistory[index];
+                        return ListTile(
+                          title: Text(word),
+                          leading: _isSelectionMode
+                              ? Checkbox(
+                                  value: _selectedWords.contains(word),
+                                  onChanged: (_) => _toggleWordSelection(word),
+                                )
+                              : null,
+                          onTap: _isSelectionMode
+                              ? () => _toggleWordSelection(word)
+                              : () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    SearchPage.routeName,
+                                    arguments: word,
+                                  );
+                                },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: wordHistory.length,
-              itemBuilder: (context, index) {
-                final word = wordHistory[index];
-                return ListTile(
-                  title: Text(word),
-                  leading: _isSelectionMode
-                      ? Checkbox(
-                          value: _selectedWords.contains(word),
-                          onChanged: (_) => _toggleWordSelection(word),
-                        )
-                      : null,
-                  onTap: _isSelectionMode
-                      ? () => _toggleWordSelection(word)
-                      : () {
-                          Navigator.pushNamed(
-                            context,
-                            SearchPage.routeName,
-                            arguments: word,
-                          );
-                        },
-                );
-              },
-            ),
+            const SizedBox(height: 16),
             if (_isSelectionMode)
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -226,36 +244,50 @@ class _LearnhistorypageState extends State<Learnhistorypage> {
                   ],
                 ),
               ),
-            const SizedBox(height: 20),
-            const Text(
-              "歌曲",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: musicHistory.length,
-              itemBuilder: (context, index) {
-                final music = musicHistory[index];
-                return ListTile(
-                  title: Text(music),
-                  leading: _isSelectionMode
-                      ? Checkbox(
-                          value: _selectedMusics.contains(music),
-                          onChanged: (_) => _toggleMusicSelection(music),
-                        )
-                      : null,
-                  onTap: _isSelectionMode
-                      ? () => _toggleMusicSelection(music)
-                      : () {
-                          Navigator.pushNamed(
-                            context,
-                            MusicPage.routeName,
-                            arguments: music,
-                          );
-                        },
-                );
-              },
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "歌曲",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: musicHistory.length,
+                      itemBuilder: (context, index) {
+                        final music = musicHistory[index];
+                        return ListTile(
+                          title: Text(music),
+                          leading: _isSelectionMode
+                              ? Checkbox(
+                                  value: _selectedMusics.contains(music),
+                                  onChanged: (_) => _toggleMusicSelection(music),
+                                )
+                              : null,
+                          onTap: _isSelectionMode
+                              ? () => _toggleMusicSelection(music)
+                              : () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    MusicPage.routeName,
+                                    arguments: music,
+                                  );
+                                },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/word.dart';
 import '../models/music.dart';
 
@@ -18,7 +19,9 @@ class ApiService {
     }
   }
 
-  static Future<List<dynamic>> fetchSDictionary(String dictionary) async {
+  static Future<List<dynamic>> fetchSDictionary() async {
+    final prfs = await SharedPreferences.getInstance();
+    String dictionary = prfs.getString('selectedDictionary') ?? 'CET4';
     String data = await rootBundle.loadString('assets/$dictionary.json');
     List dynamicList = json.decode(data)['word_list'];
     return dynamicList;
@@ -39,7 +42,6 @@ class ApiService {
   }
 
   static Future<String> fetchMediaSource(String hash, String quality) async {
-    print('fetchMediaSource: $hash $quality');
     // https://api.vkeys.cn/v2/music/tencent/geturl?mid=0023CVP23SH17s&quality=8
     final response = await http.get(
       Uri.parse(

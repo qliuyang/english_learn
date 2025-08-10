@@ -18,10 +18,9 @@ class _HomePageState extends State<HomePage> {
   List<String>? wordList;
   int currentIndex = 0;
   bool _isFavorite = false;
-
-  String selectedDictionary = 'CET4';
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late ScrollController _scrollController;
   String selectedLetter = 'A';
-
   final List<String> letters = [
     'A',
     'B',
@@ -50,18 +49,17 @@ class _HomePageState extends State<HomePage> {
     'Y',
     'Z',
   ];
-  final List<String> dictionaries = ['CET4', 'CET6', '考研', '托福', 'SAT'];
-
   // 初始化数据
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     _init();
   }
 
   void _init() async {
-    await _loadSavedData();
     await _loadDictionary();
+    await _loadSavedData();
   }
 
   void _dispose() async {
@@ -71,6 +69,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -86,6 +85,7 @@ class _HomePageState extends State<HomePage> {
     }
     await prefs.setStringList('favorites', favorites);
   }
+
   Future<bool> _isWordFavorite(String word) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> favorites = prefs.getStringList('favorites') ?? [];
@@ -94,105 +94,147 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadSavedData() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      currentIndex = prefs.getInt('currentIndex') ?? 0;
-      selectedDictionary = prefs.getString('selectedDictionary') ?? 'CET4';
-    });
+    currentIndex = prefs.getInt('currentIndex') ?? 0;
+    _updateCurrentWord(currentIndex);
   }
 
   Future<void> _saveData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('currentIndex', currentIndex);
-    await prefs.setString('selectedDictionary', selectedDictionary);
   }
 
-  // 加载词典
   Future<void> _loadDictionary() async {
-    final list = await ApiService.fetchSDictionary(selectedDictionary);
+    final list = await ApiService.fetchSDictionary();
     setState(() {
       wordList = list.cast<String>();
-      wordFuture = _fetchWord(wordList?[currentIndex] ?? 'hello');
     });
   }
 
-  // 单词导航
   void _navigateWord(int offset) async {
     if (wordList == null || wordList!.isEmpty) return;
     final isFavorite_ = await _isWordFavorite(wordList![currentIndex]);
+    int newIndex = (currentIndex + offset) % wordList!.length;
+    if (newIndex < 0) newIndex = wordList!.length - 1;
+
+    _updateCurrentWord(newIndex);
+
     setState(() {
-      currentIndex = (currentIndex + offset) % wordList!.length;
-      if (currentIndex < 0) currentIndex = wordList!.length - 1;
-      wordFuture = _fetchWord(wordList![currentIndex]);
       _isFavorite = isFavorite_;
     });
   }
 
-  // 词典选择
-  void _selectDictionary(String newDictionary) async {
-    setState(() => selectedDictionary = newDictionary);
-    await _loadDictionary();
-  }
-
-  // 字母选择
   void _selectLetter(String newLetter) {
-    String word = wordList!.firstWhere(
-      (word) => word.startsWith(newLetter),
-      orElse: () => '',
-    );
+    String word = wordList!.firstWhere((word) => word.startsWith(newLetter));
+    int index = wordList!.indexOf(word);
+
+    _updateCurrentWord(index, isSyncLetter: false);
+
     setState(() {
       selectedLetter = newLetter;
-      wordFuture = _fetchWord(word);
     });
   }
 
-  // 网络请求封装
   Future<Word> _fetchWord(String word) async {
     return await ApiService.fetchWord(word);
   }
 
-  // 主页面构建
+  void _updateCurrentWord(int index, {bool isSyncLetter = true}) {
+    setState(() {
+      currentIndex = index;
+      final word = wordList![currentIndex];
+      wordFuture = _fetchWord(word);
+      if (isSyncLetter) {
+        selectedLetter = word[0].toUpperCase();
+      }
+    });
+  }
+
+  void _searchAndJumpToWord(String searchWord) {
+    if (wordList == null) return;
+    int index = wordList!.indexWhere(
+      (word) => word.toLowerCase() == searchWord.toLowerCase(),
+    );
+
+    if (index != -1) {
+      _updateCurrentWord(index);
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('未找到该单词')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('英语词典'),
         actions: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              icon: Icon(
-                _isFavorite ? Icons.star : Icons.star_border,
-                color: _isFavorite ? Colors.yellow : null,
-              ),
-              onPressed: () {
-                setState(() {
-                  _isFavorite = !_isFavorite;
-                });
-                _saveFavoriteWord(wordList![currentIndex]);
-              },
-            ),
-          ),
+          _buildColloctionButton(),
           _buildLetterSelectDropdown(),
-          _buildDictionaryDropdown(),
           _buildNavigationButtons(),
         ],
       ),
       body: _buildContent(),
+      drawer: _buildWordListDrawer(),
     );
   }
 
-  // 词典下拉菜单
-  Widget _buildDictionaryDropdown() {
-    return DropdownButton<String>(
-      value: selectedDictionary,
-      onChanged: (value) => _selectDictionary(value!),
-      items: dictionaries
-          .map((value) => DropdownMenuItem(value: value, child: Text(value)))
-          .toList(),
-      style: const TextStyle(color: Colors.black),
-      underline: Container(height: 0),
-      icon: const Icon(Icons.arrow_drop_down),
-      elevation: 16,
+  Widget _buildWordListDrawer() {
+    return Drawer(
+      child: Column(
+        children: [
+          const DrawerHeader(
+            child: Text(
+              '单词搜索',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+          // 搜索框
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: const InputDecoration(
+                hintText: '搜索单词...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
+              ),
+              onSubmitted: _searchAndJumpToWord,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "*与搜索页面的不同，此搜索功能是在词典内查找，搜索页面是在英语单词内查找，可能会出现一些正常单词搜索不到的情况",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildColloctionButton() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: IconButton(
+        icon: Icon(
+          _isFavorite ? Icons.star : Icons.star_border,
+          color: _isFavorite ? Colors.yellow : null,
+        ),
+        onPressed: () {
+          setState(() {
+            _isFavorite = !_isFavorite;
+          });
+          _saveFavoriteWord(wordList![currentIndex]);
+        },
+      ),
     );
   }
 
