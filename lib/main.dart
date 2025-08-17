@@ -10,10 +10,21 @@ import 'pages/LearnHistoryPage.dart';
 import 'pages/CollectionPage.dart';
 import 'pages/AboutPage.dart';
 import 'pages/SettingPage.dart';
+import 'pages/CalenderPage.dart';
+import "services/NotificationService.dart";
+import 'services/CheckInReminderService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  
+  // 初始化通知服务
+  await NotificationService().init();
+  
+  // 初始化签到提醒服务
+  await CheckInReminderService().initialize();
+  
+  // 检查是否需要发送签到提醒
+  await CheckInReminderService().showCheckInReminder();
   
   runApp(
     ChangeNotifierProvider(
@@ -22,7 +33,6 @@ void main() async {
     ),
   );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -49,6 +59,7 @@ class MyApp extends StatelessWidget {
         },
         UserPage.routeName: (context) => const UserPage(),
         Learnhistorypage.routeName: (context) => const Learnhistorypage(),
+        CalenderPage.routeName: (context) => const CalenderPage(),
         CollectionPage.routeName: (context) => const CollectionPage(),
         AboutPage.routeName: (context) => const AboutPage(),
         SettingPage.routeName: (context) => const SettingPage(),

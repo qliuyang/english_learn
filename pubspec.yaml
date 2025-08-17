@@ -10,16 +10,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  url_launcher: any
-  provider: any
-  image_picker: any
-  json_annotation: any
-  http: any
-  just_audio: any
-  shared_preferences: any
-  cupertino_icons: any
-  flutter_launcher_icons: any
-  mockito: any
+  url_launcher: ^6.3.1
+  provider: ^6.1.2
+  image_picker: ^1.1.2
+  json_annotation: ^4.9.0
+  http: ^1.2.2
+  just_audio: ^0.9.44
+  shared_preferences: ^2.3.5
+  cupertino_icons: ^1.0.8
+  flutter_launcher_icons: ^0.14.2
+  mockito: ^5.4.5
+  flutter_local_notifications: ^18.0.1
+  intl: ^0.20.2
+  timezone: ^0.9.0
 
 dev_dependencies:
   flutter_test:

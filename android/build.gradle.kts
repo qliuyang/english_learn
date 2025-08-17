@@ -23,6 +23,7 @@ allprojects {
         
         // 默认Google仓库
         google()
+        mavenCentral()
     }
 }
 val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
@@ -38,4 +39,7 @@ subprojects {
 
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
+    subprojects.forEach { subproject ->
+        delete(subproject.layout.buildDirectory)
+    }
 }

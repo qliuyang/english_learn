@@ -58,7 +58,6 @@ class MusicPlayerService with ChangeNotifier {
     await _audioPlayer.stop();
     _currentAudioUrl = null;
     _currentMusicData = null;
-    _audioPlayer.clearAudioSources();
     _audioPlayer.seek(Duration.zero);
     notifyListeners();
   }

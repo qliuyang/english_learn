@@ -105,6 +105,9 @@ class _UserPageState extends State<UserPage> {
           _buildMenuItem(Icons.settings, '设置', () {
             Navigator.pushNamed(context, '/setting');
           }),
+          _buildMenuItem(Icons.calendar_month, '签到', () {
+            Navigator.pushNamed(context, '/calender');
+          }),
           _buildMenuItem(Icons.help, '关于软件', () {
             Navigator.pushNamed(context, '/about');
           }),
